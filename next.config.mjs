@@ -1,20 +1,7 @@
 /** @type {import('next').NextConfig} */
+// sito statico: la cartella "out" si pubblica su Cloudflare Pages (i reindirizzamenti stanno in public/_redirects)
 const nextConfig = {
-  images: { formats: ["image/avif", "image/webp"] },
-  // i vecchi indirizzi /lavori portano ai progetti
-  async redirects() {
-    return [
-      { source: "/lavori", destination: "/progetti", permanent: true },
-      ...[
-        ["cultura", "langhe"],
-        ["ricettivita", "residenza"],
-        ["hotellerie", "noli"],
-        ["natura", "forno-alpi-graie"],
-      ].flatMap(([from, to]) => [
-        { source: `/lavori/${from}`, destination: `/progetti/${to}`, permanent: true },
-        { source: `/progetti/${from}`, destination: `/progetti/${to}`, permanent: true },
-      ]),
-    ];
-  },
+  output: "export",
+  images: { unoptimized: true },
 };
 export default nextConfig;
