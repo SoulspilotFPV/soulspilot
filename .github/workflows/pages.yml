@@ -27,7 +27,8 @@ jobs:
       - run: npm ci
       - run: npm run build
         env:
-          NEXT_PUBLIC_SITE_URL: ${{ vars.SITE_URL }}
+          NEXT_PUBLIC_SITE_URL: https://soulspilotfpv.github.io/soulspilot
+          NEXT_PUBLIC_BASE_PATH: /soulspilot
       - run: touch out/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:

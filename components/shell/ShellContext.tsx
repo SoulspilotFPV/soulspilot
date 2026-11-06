@@ -167,7 +167,7 @@ export function ShellProvider({ children }: { children: ReactNode }) {
       router.prefetch(path);
       // ultima rete di sicurezza: se dopo 9 s lo schermo è ancora coperto, si carica la pagina in modo classico
       later(() => {
-        if (document.documentElement.style.overflow === "hidden") window.location.assign(href);
+        if (document.documentElement.style.overflow === "hidden") window.location.assign((process.env.NEXT_PUBLIC_BASE_PATH ?? "") + href);
       }, 9000);
       later(() => {
         target.current = path;
@@ -176,7 +176,7 @@ export function ShellProvider({ children }: { children: ReactNode }) {
         // rete di sicurezza: se la pagina nuova non arriva (per esempio dopo un aggiornamento del sito
         // con la scheda già aperta), si carica in modo classico invece di restare sotto la copertura
         later(() => {
-          if (target.current === path) window.location.assign(href);
+          if (target.current === path) window.location.assign((process.env.NEXT_PUBLIC_BASE_PATH ?? "") + href);
         }, NAV_SAFETY_MS);
       }, COVER_MS[m]);
     },

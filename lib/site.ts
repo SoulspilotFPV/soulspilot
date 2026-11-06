@@ -1,3 +1,6 @@
+/** prefisso della cartella su cui è pubblicato il sito (vuoto sul dominio proprio) */
+export const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 // Tutti i segnaposto in un unico punto: sostituisci qui i dati reali.
 export const site = {
   brand: "soulspilot",
@@ -69,8 +72,8 @@ export const works: WorkArea[] = [
     audience: "Musei, fortezze, enti culturali, comuni",
     code: "LNG",
     ticket: { paper: "#f3e7d4", ink: "#2b1a17", accent: "#7a2e2a", icon: "castello" },
-    video: "/video/cultura",
-    stills: "/stills/cultura",
+    video: `${base}/video/cultura`,
+    stills: `${base}/stills/cultura`,
     place: "Langhe, Piemonte",
     coords: [44.62, 7.99],
     shot: { seconds: 12, heading: [312, 18] },
@@ -92,8 +95,8 @@ export const works: WorkArea[] = [
     audience: "Hotel, resort, B&B, case vacanza",
     code: "NOL",
     ticket: { paper: "#e2ecf2", ink: "#10202e", accent: "#1f4e79", icon: "mare" },
-    video: "/video/hotellerie",
-    stills: "/stills/hotellerie",
+    video: `${base}/video/hotellerie`,
+    stills: `${base}/stills/hotellerie`,
     place: "Noli, Liguria",
     coords: [44.2063, 8.4155],
     shot: { seconds: 15, heading: [205, 150] },
@@ -116,8 +119,8 @@ export const works: WorkArea[] = [
     audience: "Agenzie di pregio, ville e dimore oltre il milione",
     code: "RES",
     ticket: { paper: "#efe6da", ink: "#2a211b", accent: "#8a5a3b", icon: "casa" },
-    video: "/video/ricettivita",
-    stills: "/stills/ricettivita",
+    video: `${base}/video/ricettivita`,
+    stills: `${base}/stills/ricettivita`,
     place: "[Località], Piemonte",
     coords: [44.89, 7.33],
     shot: { seconds: 16, heading: [88, 176] },
@@ -140,8 +143,8 @@ export const works: WorkArea[] = [
     audience: "Parchi, comuni, enti turistici, realtà outdoor",
     code: "FAG",
     ticket: { paper: "#e3eae2", ink: "#18241d", accent: "#2f5240", icon: "montagna" },
-    video: "/video/natura",
-    stills: "/stills/natura",
+    video: `${base}/video/natura`,
+    stills: `${base}/stills/natura`,
     place: "Forno Alpi Graie, Piemonte",
     coords: [45.364, 7.221],
     shot: { seconds: 14, heading: [340, 262] },

@@ -320,7 +320,7 @@ let noiseCache: Promise<Noise> | null = null;
 
 /** Mappa d'altezza pre-generata (scripts/gen-height.cjs): Uint16 con codifica delta per riga, gzip. */
 async function fetchHeight(K: number): Promise<Uint16Array> {
-  const res = await fetch(`/noise/height${K}.bin.gz`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/noise/height${K}.bin.gz`);
   if (!res.ok) throw new Error("mappa non disponibile");
   let buf = await res.arrayBuffer();
   // alcuni server la decomprimono già da soli: si decomprime solo se c'è ancora la firma gzip
