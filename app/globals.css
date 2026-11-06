@@ -1,0 +1,158 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --white: #ffffff;
+  --paper: #ffffff;
+  --mist: #f7f7f5;
+  --sand: #f4eee3;
+  --sand2: #ede6d8;
+  --sage: #c9d6c3;
+  --sky: #cfe0ec;
+  --ink: #1e2123;
+  --ink2: #5b5f61;
+  --ink3: #8a8d8e;
+  --line: #e6e6e2;
+  --dusk: #14181a;
+  --verde: #2f5240;
+  --verde-chiaro: #6f9a7c;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px;
+  -webkit-text-size-adjust: 100%;
+}
+
+html,
+body {
+  overflow-x: clip; /* le sezioni in prospettiva non devono creare scroll orizzontale */
+}
+
+body {
+  background: var(--white);
+  color: var(--ink);
+  font-family: var(--font-manrope), system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+@media (min-width: 768px) {
+  body { font-size: 18px; }
+}
+
+::selection { background: var(--sage); color: var(--ink); }
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-page px-6 md:px-12;
+  }
+  .section-y { @apply py-24 md:py-[120px]; }
+
+  .h2 {
+    font-weight: 600;
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.06;
+    letter-spacing: -0.032em;
+  }
+  .accent {
+    font-family: var(--font-serif), Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  .eyebrow {
+    @apply inline-flex items-center gap-3 text-[13px] font-semibold text-verde;
+    letter-spacing: 0.02em;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2.5 rounded-full px-7 text-[15px] font-semibold;
+    height: 52px;
+    transition: background-color 300ms var(--ease), color 300ms var(--ease), transform 300ms var(--ease), box-shadow 300ms var(--ease);
+  }
+  .btn-dark { @apply bg-ink text-white; }
+  .btn-dark:hover { background: var(--verde); }
+  .btn-light { @apply bg-white text-ink; }
+  .btn-light:hover { background: var(--verde); color: #fff; }
+  .btn .dot { @apply h-2 w-2 rounded-full bg-verde; transition: background-color 300ms var(--ease); }
+  .btn:hover .dot { background: #fff; }
+
+  .stripes {
+    background-image: repeating-linear-gradient(
+      135deg,
+      var(--stripe-a, #f4eee3) 0 14px,
+      var(--stripe-b, #ede6d8) 14px 28px
+    );
+  }
+}
+
+/* Badge flottanti: oscillazione verticale lenta e sfasata */
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.float-a { animation: float-y 7s ease-in-out infinite; }
+.float-b { animation: float-y 6s ease-in-out -2s infinite; }
+.float-c { animation: float-y 8s ease-in-out -4s infinite; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner {
+  width: 16px; height: 16px; border-radius: 999px;
+  border: 1.5px solid rgba(255,255,255,.35);
+  border-top-color: #fff;
+  animation: spin 900ms linear infinite;
+}
+
+.skip-link {
+  position: absolute; left: 16px; top: -64px; z-index: 100;
+  background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 999px;
+  transition: top 250ms var(--ease);
+}
+.skip-link:focus { top: 16px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Le righe dei segnaposto scorrono piano, così le card non restano ferme */
+@keyframes stripes-drift { to { background-position: 39.6px 0; } }
+.stripes-drift { animation: stripes-drift 9s linear infinite; }
+
+/* invito a scorrere: una goccia di luce che scende */
+@keyframes scroll-cue { 0% { transform: translateY(-100%); } 100% { transform: translateY(250%); } }
+.scroll-cue { animation: scroll-cue 2s cubic-bezier(.6,0,.4,1) infinite; }
+
+
+/* disco volante del caricamento: alone che pulsa, luci del bordo che si rincorrono */
+@keyframes ufo-glow { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+.ufo-glow { animation: ufo-glow 2.2s ease-in-out infinite; }
+@keyframes ufo-chase { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+.ufo-chase { animation: ufo-chase 1.2s ease-in-out infinite; }
+/* fascio di luce etereo: respira piano, i raggi scivolano di lato, i granelli salgono */
+@keyframes beam-breathe { 0%, 100% { opacity: 0.85; } 50% { opacity: 1; } }
+.beam-breathe { animation: beam-breathe 5s ease-in-out infinite; }
+@keyframes beam-rays { 0% { background-position: 0 0; opacity: 0.55; } 50% { opacity: 0.9; } 100% { background-position: 160px 0; opacity: 0.55; } }
+.beam-rays {
+  background-image:
+    repeating-linear-gradient(90deg, transparent 0 14px, rgba(236,252,241,.16) 18px 22px, transparent 26px 58px),
+    repeating-linear-gradient(90deg, transparent 0 33px, rgba(236,252,241,.1) 37px 40px, transparent 44px 91px);
+  animation: beam-rays 14s ease-in-out infinite;
+}
+@keyframes beam-dust { 0% { top: 100%; opacity: 0; transform: translateX(0); } 20% { opacity: 0.9; } 55% { transform: translateX(8px); } 85% { opacity: 0.6; } 100% { top: 6%; opacity: 0; transform: translateX(-6px); } }
+.beam-dust { top: 100%; animation: beam-dust 6s ease-in-out infinite; }
