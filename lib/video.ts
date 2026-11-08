@@ -7,6 +7,8 @@ let av1: boolean | null = null;
 
 export function videoSrc(base: string) {
   const tag = window.innerHeight > window.innerWidth * 1.05 ? "m" : "d";
+  // su telefono sempre H.264 con fotogrammi completi ravvicinati: lo scrub resta pulito e il decoder hardware lo regge
+  if (tag === "m") return `${base}-m.mp4`;
   if (av1 === null) {
     const probe = document.createElement("video");
     av1 = probe.canPlayType('video/mp4; codecs="av01.0.08M.08"') === "probably";
