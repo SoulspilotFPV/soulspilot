@@ -8,7 +8,7 @@ import Footer from "./Footer";
  * che scorre con la pagina e ritaglia (clip-path) tutto ciò che sta fuori dalla sua area.
  * Man mano che il contenitore entra, il footer si scopre dal basso, come una tenda che si alza.
  * Gli angoli sono quelli di sempre: la pagina è arrotondata sopra il verde (due orecchi verdi ai lati).
- * Su telefono niente tenda: il footer scorre in flusso normale (la barra di Safari sfalsa gli elementi fissi).
+ * Il rimbalzo elastico di iPhone a fine pagina sfalserebbe la tenda: si disattiva in globals.css (overscroll-behavior).
  * Non c'è nessun calcolo a ogni scroll: la tenda è sincronizzata con la pagina per costruzione,
  * anche su iPhone dove lo scroll è gestito dal sistema e la barra del browser cambia l'altezza.
  */
@@ -50,12 +50,12 @@ export default function FooterCurtain({ scene }: { scene: string }) {
   });
 
   return (
-    <div data-scene={scene} className={`relative [--r:40px] md:[--r:56px] ${tall ? "" : "md:h-[var(--h)]"}`} style={{ "--h": tall ? "auto" : `${h || 0}px` } as React.CSSProperties}>
+    <div data-scene={scene} className={`relative [--r:40px] md:[--r:56px] ${tall ? "" : "h-[var(--h)]"}`} style={{ "--h": tall ? "auto" : `${h || 0}px` } as React.CSSProperties}>
       <span aria-hidden className="pointer-events-none absolute left-0 top-[calc(var(--r)*-1)] z-[6] h-[var(--r)] w-[var(--r)] bg-[#1c3227]" style={ear("left")} />
       <span aria-hidden className="pointer-events-none absolute right-0 top-[calc(var(--r)*-1)] z-[6] h-[var(--r)] w-[var(--r)] bg-[#1c3227]" style={ear("right")} />
       {/* il ritaglio dritto: mostra del footer fisso solo la parte dentro questa area */}
-      <div className={tall ? "relative" : "relative md:absolute md:inset-0 md:[clip-path:inset(-1px_0_0_0)]"}>
-        <div className={tall ? "relative" : "relative md:fixed md:inset-x-0 md:bottom-0 md:z-[5]"}>
+      <div className={tall ? "relative" : "absolute inset-0 [clip-path:inset(-1px_0_0_0)]"}>
+        <div className={tall ? "relative" : "fixed inset-x-0 bottom-0 z-[5]"}>
           <div ref={content}>
             <Footer />
           </div>

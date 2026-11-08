@@ -24,6 +24,7 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 96px;
   -webkit-text-size-adjust: 100%;
+  overscroll-behavior-y: none; /* niente rimbalzo a fine pagina: sfalserebbe il footer a tenda */
 }
 
 html,
