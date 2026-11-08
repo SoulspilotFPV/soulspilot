@@ -1,13 +1,15 @@
-import type { Metadata } from "next";
+import { pageMeta } from "@/lib/meta";
 import Contact from "@/components/Contact";
 import CtaBanner from "@/components/CtaBanner";
 import FooterCurtain from "@/components/FooterCurtain";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: `Contatti · ${site.brand}`,
-  description: "Fai vivere un luogo: riprese aeree, voli FPV e siti web. Prenota una chiamata.",
-};
+export const metadata = pageMeta({
+  title: `Parliamone in 30 minuti · ${site.brand}`,
+  description: "Prenota una chiamata di 30 minuti per raccontarmi il tuo luogo. Ti rispondo entro 24 ore.",
+  path: "/contatti",
+  image: "contatti",
+});
 
 export default function Contatti() {
   return (

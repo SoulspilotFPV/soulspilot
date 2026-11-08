@@ -30,7 +30,7 @@ export default function NextProject({ w }: { w: WorkArea }) {
         <span className="absolute inset-0 bg-gradient-to-t from-black/65 to-black/5" />
         <span className="absolute inset-x-8 bottom-8 flex items-end justify-between text-white">
           <span>
-            <span className="mb-2 block font-mono text-[11px] uppercase tracking-[0.2em] text-white/75">Prossimo progetto · {w.category}</span>
+            <span className="mb-2 block font-mono text-[11px] uppercase tracking-[0.2em] text-white/75">Prossimo progetto · {w.sector}</span>
             <span className="accent block text-[clamp(40px,5vw,64px)] leading-none">{w.title}</span>
           </span>
           <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-ink transition-transform duration-500 group-hover:rotate-[-45deg]">

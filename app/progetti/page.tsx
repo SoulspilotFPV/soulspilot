@@ -1,14 +1,16 @@
-import type { Metadata } from "next";
+import { pageMeta } from "@/lib/meta";
 import FooterCurtain from "@/components/FooterCurtain";
 import Reveal from "@/components/Reveal";
 import ProjectGrid from "@/components/ProjectGrid";
 import TransitionLink from "@/components/shell/TransitionLink";
 import { site, works } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: `Progetti · ${site.brand}`,
-  description: "Promozione culturale, immobiliare, hotellerie e valorizzazione del territorio: luoghi raccontati dall'alto e da dentro.",
-};
+  description: "Cartoline e chiavi: luoghi raccontati dall'alto e da dentro, per far venire voglia di visitarli prima ancora di arrivare.",
+  path: "/progetti",
+  image: "progetti",
+});
 
 export default function Progetti() {
   return (
@@ -23,7 +25,7 @@ export default function Progetti() {
             </Reveal>
             <Reveal delay={0.1} className="max-w-[400px]">
               <p className="text-ink/75">
-                Quattro luoghi, quattro settori, un solo modo di lavorare: con calma, dall&apos;alto e da dentro. Passa sopra
+                Due famiglie di racconti: le cartoline, per i luoghi da scoprire, e le chiavi, per gli spazi da abitare. Passa sopra
                 un progetto per vederlo prendere vita.
               </p>
             </Reveal>
@@ -38,7 +40,7 @@ export default function Progetti() {
               Facciamo vivere il <span className="accent">prossimo luogo.</span>
             </h2>
             <TransitionLink href="/contatti" label="Rotta: Contatti" className="btn btn-dark">
-              Entriamo in contatto <span className="dot" aria-hidden />
+              Prenota 30 minuti <span className="dot" aria-hidden />
             </TransitionLink>
           </Reveal>
         </div>

@@ -16,7 +16,7 @@
 <priority>0.6</priority>
 </url>
 <url>
-<loc>https://soulspilotfpv.github.io/soulspilot/benefici</loc>
+<loc>https://soulspilotfpv.github.io/soulspilot/cosa-faccio</loc>
 <changefreq>monthly</changefreq>
 <priority>0.8</priority>
 </url>
@@ -26,12 +26,7 @@
 <priority>0.6</priority>
 </url>
 <url>
-<loc>https://soulspilotfpv.github.io/soulspilot/progetti/langhe</loc>
-<changefreq>monthly</changefreq>
-<priority>0.7</priority>
-</url>
-<url>
-<loc>https://soulspilotfpv.github.io/soulspilot/progetti/noli</loc>
+<loc>https://soulspilotfpv.github.io/soulspilot/progetti/fenestrelle</loc>
 <changefreq>monthly</changefreq>
 <priority>0.7</priority>
 </url>
@@ -41,7 +36,7 @@
 <priority>0.7</priority>
 </url>
 <url>
-<loc>https://soulspilotfpv.github.io/soulspilot/progetti/forno-alpi-graie</loc>
+<loc>https://soulspilotfpv.github.io/soulspilot/progetti/ospitalita</loc>
 <changefreq>monthly</changefreq>
 <priority>0.7</priority>
 </url>

@@ -3,7 +3,10 @@ import ClientLogos from "@/components/ClientLogos";
 import Journey from "@/components/Journey";
 import LandingEnd from "@/components/LandingEnd";
 import FooterCurtain from "@/components/FooterCurtain";
+import { pageMeta } from "@/lib/meta";
 import { site } from "@/lib/site";
+
+export const metadata = pageMeta({ title: site.title, description: site.description, path: "/", image: "home" });
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -13,15 +16,15 @@ const jsonLd = {
       name: site.name,
       jobTitle: "Pilota di droni e videomaker aereo",
       url: site.url,
-      email: site.email,
-      sameAs: Object.values(site.social),
+      ...(site.email ? { email: site.email } : {}),
+      ...(Object.keys(site.social).length ? { sameAs: Object.values(site.social) } : {}),
     },
     {
-      "@type": "LocalBusiness",
+      "@type": "ProfessionalService",
       name: site.brand,
       description: site.description,
       url: site.url,
-      email: site.email,
+      ...(site.email ? { email: site.email } : {}),
       areaServed: "IT",
     },
   ],

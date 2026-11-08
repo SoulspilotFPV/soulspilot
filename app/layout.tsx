@@ -26,17 +26,10 @@ const mono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(site.url),
-  title: `${site.brand} · Riprese aeree con drone`,
+  metadataBase: new URL(site.url.endsWith("/") ? site.url : site.url + "/"),
+  title: site.title,
   description: site.description,
-  openGraph: {
-    title: `${site.brand} · Riprese aeree con drone`,
-    description: site.description,
-    type: "website",
-    locale: "it_IT",
-    url: site.url,
-  },
-  twitter: { card: "summary_large_image" },
+  openGraph: { siteName: site.brand, locale: "it_IT", type: "website" },
 };
 
 export const viewport: Viewport = { themeColor: "#ffffff" };

@@ -1,35 +1,53 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import TransitionLink from "./shell/TransitionLink";
+import Reveal from "./Reveal";
 import { fallbackToH264, videoSrc } from "@/lib/video";
 import Claim from "./Claim";
-import { Barcode, Illustration, notchBottom, notchTop } from "./Ticket";
-import { LotusMark } from "./Logo";
-import { dms } from "@/lib/geo";
-import type { WorkArea } from "@/lib/site";
+import { Arrow, KeyArt, Postmark, Stamp, colorsOf, stampOf } from "./Marks";
+import { eyebrow, type WorkArea } from "@/lib/site";
 
-const pad = (n: number) => String(n).padStart(2, "0");
-
-// disposizione editoriale: grande e piccolo si alternano, le colonne sono sfalsate in altezza
-const LAYOUT = [
-  { span: "md:col-span-7", ratio: "aspect-[16/10]", shift: "" },
-  { span: "md:col-span-5", ratio: "aspect-[4/3]", shift: "md:mt-28" },
-  { span: "md:col-span-5", ratio: "aspect-[4/3]", shift: "md:-mt-20" },
-  { span: "md:col-span-7", ratio: "aspect-[16/10]", shift: "md:mt-10" },
-];
+/** Cartolina in arrivo: carta bianca, francobollo tratteggiato, nessuna ripresa. */
+function SoonCard({ w }: { w: WorkArea }) {
+  const { paper, ink, accent } = colorsOf(w);
+  return (
+    <div style={{ background: paper, color: ink }} className="relative overflow-hidden rounded-[18px] shadow-[0_30px_70px_-45px_rgba(20,24,26,.45)]">
+      <div className="relative aspect-[16/10] border-b border-dashed" style={{ borderColor: `${ink}30` }}>
+        <div className="absolute right-6 top-6 flex h-[110px] w-[88px] rotate-[3deg] items-center justify-center rounded-[4px] border-2 border-dashed text-center font-mono text-[9px] uppercase leading-snug tracking-[0.14em] opacity-70" style={{ borderColor: accent, color: accent }}>
+          francobollo
+          <br />
+          in arrivo
+        </div>
+        <Postmark text={w.mark} color={`${ink}66`} className="absolute right-[110px] top-9 h-[84px] w-[126px] -rotate-6" />
+        <p className="accent absolute bottom-5 left-6 text-[44px] leading-none" style={{ color: accent }}>
+          {w.title}
+        </p>
+      </div>
+      <div className="px-6 pb-6 pt-5 sm:px-7">
+        <p className="font-mono text-[10px] uppercase tracking-[0.18em]" style={{ color: accent }}>
+          {eyebrow(w)}
+        </p>
+        <h3 className="mt-4 max-w-[24ch] text-[clamp(22px,2vw,28px)] font-semibold leading-[1.1] tracking-[-0.03em]">
+          <Claim text={w.claim} />
+        </h3>
+        <p className="mt-3 max-w-[50ch] text-[14.5px] leading-snug opacity-75">{w.line}</p>
+      </div>
+    </div>
+  );
+}
 
 /**
- * Un progetto come carta d'imbarco: fotografia in alto (passandoci sopra parte il video),
- * destinazione e promessa nel corpo, matrice con il codice a barre che si stacca appena.
+ * Un progetto: fotografia in alto (passandoci sopra parte il video), poi il suo biglietto.
+ * Cartolina: francobollo e timbro sulla foto, "Gira la cartolina". Chiave: fondo chiaro e sobrio, "Apri la porta".
  */
-function Card({ w, n, layout }: { w: WorkArea; n: number; layout: (typeof LAYOUT)[number] }) {
+function Card({ w }: { w: WorkArea }) {
   const video = useRef<HTMLVideoElement>(null);
   const box = useRef<HTMLDivElement>(null);
   const [playing, setPlaying] = useState(false);
   const still = w.stills ? `${w.stills}/1.avif` : undefined;
-  const { paper, ink, accent, icon } = w.ticket;
+  const { paper, ink, accent } = colorsOf(w);
+  const isKey = w.kind === "chiave";
 
   const ensure = () => {
     const v = video.current;
@@ -49,7 +67,7 @@ function Card({ w, n, layout }: { w: WorkArea; n: number; layout: (typeof LAYOUT
     const offP = () => setPlaying(false);
     v.addEventListener("playing", on);
     v.addEventListener("pause", offP);
-    // su touch non c'è il passaggio del mouse: il video parte quando il riquadro è ben visibile
+    // su touch non c'è il passaggio del mouse: il video (muto) parte quando il riquadro è ben visibile
     let io: IntersectionObserver | undefined;
     if (window.matchMedia("(hover: none)").matches && box.current) {
       io = new IntersectionObserver(([e]) => (e.intersectionRatio > 0.65 ? play() : stop()), { threshold: [0, 0.65, 1] });
@@ -80,153 +98,95 @@ function Card({ w, n, layout }: { w: WorkArea; n: number; layout: (typeof LAYOUT
   };
 
   return (
-    <motion.li
-      layout
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.96 }}
-      transition={{ duration: 0.7, ease: [0.2, 0.7, 0.2, 1] }}
-      className={`${layout.span} ${layout.shift}`}
+    <TransitionLink
+      href={`/progetti/${w.slug}`}
+      label={`Rotta: ${w.title}`}
+      expand={() => {
+        const r = box.current!.getBoundingClientRect();
+        return { rect: { top: r.top, left: r.left, width: r.width, height: r.height }, image: capture() };
+      }}
+      onMouseEnter={play}
+      onMouseLeave={stop}
+      onFocus={play}
+      onBlur={stop}
+      className="group block"
     >
-      <TransitionLink
-        href={`/progetti/${w.slug}`}
-        label={`Rotta: ${w.title}`}
-        expand={() => {
-          const r = box.current!.getBoundingClientRect();
-          return { rect: { top: r.top, left: r.left, width: r.width, height: r.height }, image: capture() };
-        }}
-        onMouseEnter={play}
-        onMouseLeave={stop}
-        onFocus={play}
-        onBlur={stop}
-        className="group block"
-      >
-        {/* corpo: fotografia e destinazione */}
-        <div style={{ background: paper, color: ink, ...notchBottom }} className="relative overflow-hidden rounded-t-[26px] shadow-[0_30px_70px_-40px_rgba(20,24,26,.45)]">
-          <div ref={box} className={`relative overflow-hidden bg-sand ${layout.ratio}`}>
-            {still && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={still}
-                alt={`${w.title}, ${w.place}`}
-                loading={n < 2 ? "eager" : "lazy"}
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1400ms] [transition-timing-function:var(--ease)] group-hover:scale-[1.05]"
-              />
-            )}
-            <video
-              ref={video}
-              muted
-              loop
-              playsInline
-              preload="none"
-              aria-hidden
-              tabIndex={-1}
-              className={`absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-700 [transition-timing-function:var(--ease)] group-hover:scale-[1.05] ${
-                playing ? "opacity-100" : "opacity-0"
-              }`}
-            />
-            <span className="absolute left-4 top-4 rounded-full bg-white/85 px-3 py-1 font-mono text-[11px] tracking-[0.16em] backdrop-blur-sm" style={{ color: accent }}>
-              SP{pad(n + 1)}
-            </span>
-          </div>
-
-          <div className="relative px-6 pb-6 pt-5 sm:px-7">
-            {/* filigrana del luogo */}
-            <div className="pointer-events-none absolute -bottom-3 -right-3 h-28 w-40 opacity-[0.12]">
-              <Illustration icon={icon} color={accent} />
-            </div>
-            <p className="relative flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em]" style={{ color: accent }}>
-              <LotusMark color={accent} size={14} stroke={3.4} />
-              {w.category}
-            </p>
-            <div className="relative mt-3 flex items-end gap-4">
-              <span className="text-[52px] font-semibold leading-[0.85] tracking-[-0.05em] sm:text-[60px]" style={{ color: accent }}>
-                {w.code}
-              </span>
-              <span className="min-w-0 pb-0.5">
-                <span className="accent block truncate text-[26px] leading-none">{w.title}</span>
-                <span className="mt-1 block truncate text-[12px] opacity-70">{w.place}</span>
-              </span>
-            </div>
-            <h2 className="relative mt-5 max-w-[24ch] text-[clamp(22px,2vw,28px)] font-semibold leading-[1.1] tracking-[-0.03em]">
-              <Claim text={w.claim} />
-            </h2>
-            <p className="relative mt-3 max-w-[50ch] text-[14.5px] leading-snug opacity-75">{w.line}</p>
-          </div>
+      <div style={{ background: paper, color: ink }} className="relative overflow-hidden rounded-[18px] shadow-[0_30px_70px_-45px_rgba(20,24,26,.45)]">
+        <div ref={box} className="relative aspect-[16/10] overflow-hidden bg-sand">
+          {still && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={still} alt={w.title} loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1400ms] [transition-timing-function:var(--ease)] group-hover:scale-[1.05]" />
+          )}
+          <video
+            ref={video}
+            muted
+            loop
+            playsInline
+            preload="none"
+            aria-hidden
+            tabIndex={-1}
+            className={`absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-700 [transition-timing-function:var(--ease)] group-hover:scale-[1.05] ${playing ? "opacity-100" : "opacity-0"}`}
+          />
+          {!isKey && (
+            <>
+              <Stamp color={accent} className="absolute right-4 top-4 h-[92px] w-[74px] rotate-[3deg] shadow-md">
+                {stampOf(w)}
+              </Stamp>
+              <Postmark text={w.mark} color="rgba(255,255,255,.85)" className="absolute right-[82px] top-6 h-[76px] w-[114px] -rotate-6" />
+            </>
+          )}
         </div>
 
-        {/* linea di strappo */}
-        <div className="relative z-10 h-0" aria-hidden>
-          <span className="absolute inset-x-6 top-0 border-t-2 border-dashed" style={{ borderColor: `${ink}30` }} />
-        </div>
-
-        {/* matrice: si stacca appena al passaggio */}
-        <div
-          style={{ background: paper, color: ink, ...notchTop }}
-          className="flex origin-top-left items-center justify-between gap-6 rounded-b-[26px] px-6 py-4 transition-transform duration-700 [transition-timing-function:var(--ease)] group-hover:translate-y-1.5 group-hover:rotate-[1deg] sm:px-7"
-        >
-          <div className="w-[42%] max-w-[180px]">
-            <Barcode seed={`SP${pad(n + 1)}${w.code}`} color={ink} />
-          </div>
-          <span className="flex items-center gap-3">
-            <span className="hidden whitespace-nowrap text-right font-mono text-[10px] uppercase leading-relaxed tracking-[0.12em] opacity-70 xl:block">
-              {dms(w.coords[0], "N", "S", false)}
-              <br />
-              {dms(w.coords[1], "E", "O", false)}
-            </span>
-            <span className="text-[15px] font-semibold">Imbarcati</span>
-            <span
-              className="flex h-10 w-10 items-center justify-center rounded-full text-white transition-transform duration-500 group-hover:-rotate-45"
-              style={{ background: accent }}
-              aria-hidden
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-                <path d="M5 12h14M13 6l6 6-6 6" />
-              </svg>
+        <div className="relative px-6 pb-6 pt-5 sm:px-7">
+          {isKey && <KeyArt color={accent} tag={w.slug === "ospitalita"} className="pointer-events-none absolute -bottom-1 right-3 h-24 w-36 opacity-[0.12]" />}
+          <p className="relative font-mono text-[10px] uppercase tracking-[0.18em]" style={{ color: accent }}>
+            {eyebrow(w)}
+          </p>
+          <p className="accent relative mt-3 text-[34px] leading-none" style={{ color: accent }}>
+            {w.title}
+          </p>
+          <h3 className="relative mt-4 max-w-[24ch] text-[clamp(22px,2vw,28px)] font-semibold leading-[1.1] tracking-[-0.03em]">
+            <Claim text={w.claim} />
+          </h3>
+          <p className="relative mt-3 max-w-[50ch] text-[14.5px] leading-snug opacity-75">{w.line}</p>
+          <span className="relative mt-5 inline-flex items-center gap-3 text-[15px] font-semibold" style={{ color: accent }}>
+            {isKey ? "Apri la porta" : "Gira la cartolina"}
+            <span className="flex h-10 w-10 items-center justify-center rounded-full text-white transition-transform duration-500 group-hover:-rotate-45" style={{ background: accent }} aria-hidden>
+              <Arrow />
             </span>
           </span>
         </div>
-      </TransitionLink>
-    </motion.li>
+      </div>
+    </TransitionLink>
   );
 }
 
-/** Griglia editoriale dei progetti, con filtri per categoria. */
-export default function ProjectGrid({ works }: { works: WorkArea[] }) {
-  const categories = useMemo(() => ["Tutti", ...Array.from(new Set(works.map((w) => w.category)))], [works]);
-  const [filter, setFilter] = useState("Tutti");
-  const shown = works.filter((w) => filter === "Tutti" || w.category === filter);
+function Section({ title, intro, items }: { title: string; intro: string; items: WorkArea[] }) {
+  return (
+    <section aria-label={title} className="mt-14 first:mt-0 md:mt-20">
+      <Reveal className="mb-8 flex flex-col gap-2 md:mb-10 md:flex-row md:items-end md:justify-between">
+        <h2 className="text-[clamp(34px,4.4vw,56px)] font-semibold leading-none tracking-[-0.04em] text-ink">
+          <span className="accent">{title}</span>
+        </h2>
+        <p className="max-w-[40ch] text-[15px] text-ink/70">{intro}</p>
+      </Reveal>
+      <ul className="grid grid-cols-1 gap-x-8 gap-y-12 md:grid-cols-2">
+        {items.map((w) => (
+          <Reveal as="li" key={w.slug}>
+            {w.status === "in-arrivo" ? <SoonCard w={w} /> : <Card w={w} />}
+          </Reveal>
+        ))}
+      </ul>
+    </section>
+  );
+}
 
+/** I progetti in due sezioni: cartoline e chiavi. Pochi elementi, quindi niente filtri. */
+export default function ProjectGrid({ works }: { works: WorkArea[] }) {
   return (
     <div>
-      <div role="group" aria-label="Filtra per categoria" className="mb-12 flex flex-wrap gap-2 md:mb-16">
-        {categories.map((c) => {
-          const count = c === "Tutti" ? works.length : works.filter((w) => w.category === c).length;
-          const on = filter === c;
-          return (
-            <button
-              key={c}
-              type="button"
-              onClick={() => setFilter(c)}
-              aria-pressed={on}
-              className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[14px] font-medium transition-all duration-300 ${
-                on ? "border-ink bg-ink text-white" : "border-ink/15 bg-white/50 text-ink backdrop-blur hover:border-ink/40"
-              }`}
-            >
-              {c}
-              <span className={`font-mono text-[11px] ${on ? "text-white/60" : "text-ink3"}`}>{count}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      <motion.ul layout className="grid grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-12 md:gap-y-24">
-        <AnimatePresence mode="popLayout">
-          {shown.map((w, i) => (
-            <Card key={w.slug} w={w} n={works.indexOf(w)} layout={LAYOUT[i % LAYOUT.length]} />
-          ))}
-        </AnimatePresence>
-      </motion.ul>
+      <Section title="Cartoline" intro="Luoghi da spedire a chi non c'è ancora: un'immagine, un timbro, la voglia di partire." items={works.filter((w) => w.kind === "cartolina")} />
+      <Section title="Chiavi" intro="Spazi da aprire prima di entrarci: la porta si apre sul video, e poi sulla visita." items={works.filter((w) => w.kind === "chiave")} />
     </div>
   );
 }

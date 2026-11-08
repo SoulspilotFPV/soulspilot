@@ -4,9 +4,9 @@ import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import VideoScrub from "./VideoScrub";
 import ShotOverlay from "./ShotOverlay";
-import BoardingStub from "./BoardingStub";
+import WorkStub from "./WorkStub";
 import Claim from "./Claim";
-import { works } from "@/lib/site";
+import { eyebrow, works } from "@/lib/site";
 
 function Chapter({ index, slug }: { index: number; slug: string }) {
   const w = works.find((x) => x.slug === slug)!;
@@ -37,7 +37,6 @@ function Chapter({ index, slug }: { index: number; slug: string }) {
   // a testo spento il pulsante non deve restare cliccabile
   const claimV = useTransform(claimO, (v) => (v > 0.01 ? "visible" : "hidden"));
   const capV = useTransform(capO, (v) => (v > 0.01 ? "visible" : "hidden"));
-  const pad = (n: number) => String(n).padStart(2, "0");
 
   return (
     <section ref={ref} data-scene={slug} aria-label={w.title} className="relative h-[340vh]">
@@ -52,7 +51,7 @@ function Chapter({ index, slug }: { index: number; slug: string }) {
           <div className="absolute inset-x-7 bottom-12 sm:inset-x-10 sm:bottom-16 md:inset-x-16">
             <motion.div style={{ opacity: claimO, y: claimY, visibility: claimV }}>
               <p className="mb-5 font-mono text-[12px] uppercase tracking-[0.2em] text-white/80">
-                {pad(index + 1)} / {pad(works.length)} · {w.category} · {w.place}
+                {eyebrow(w)}
               </p>
               <h2 className="max-w-[20ch] text-[clamp(34px,5.4vw,84px)] font-semibold leading-[1] tracking-[-0.045em] [text-shadow:0_2px_50px_rgba(0,0,0,.3)]">
                 <Claim text={w.claim} />
@@ -62,7 +61,7 @@ function Chapter({ index, slug }: { index: number; slug: string }) {
           </div>
           {/* secondo tempo: la matrice della carta d'imbarco */}
           <motion.div style={{ opacity: capO, y: capY, visibility: capV }} className="absolute inset-x-5 bottom-8 sm:inset-x-10 sm:bottom-12">
-            <BoardingStub w={w} index={index} />
+            <WorkStub w={w} />
           </motion.div>
         </ShotOverlay>
       </div>

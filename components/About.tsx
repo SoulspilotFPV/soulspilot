@@ -4,23 +4,14 @@ import PresenceCanvas from "./PresenceCanvas";
 import Reveal from "./Reveal";
 import Placeholder from "./Placeholder";
 import TransitionLink from "./shell/TransitionLink";
+import { navCta } from "@/lib/site";
 import { site } from "@/lib/site";
 
-// il cosa: arriva dopo il perché e il come
-const roles: { title: string; text: string; link?: { href: string; label: string; intro: string } }[] = [
-  {
-    title: "Riprese aeree e FPV ininterrotte",
-    text: "Territori, fortezze, hotel e dimore di pregio, raccontati dall'alto e da dentro con un unico volo fluido e liscio.",
-  },
-  {
-    title: "Esperienze web su misura",
-    text: "L'esperienza non finisce con il video: la prolunghiamo sul web con siti costruiti attorno alle immagini, perché chi arriva continui a vivere il luogo fino alla visita o alla prenotazione.",
-  },
-  {
-    title: "Presenza e suono d'ambiente",
-    text: "Il filo di tutto. Prima di volare ascoltiamo il luogo, registrando i suoi suoni naturali sul posto per restituire un'atmosfera acustica e visiva viva e autentica.",
-    link: { href: "https://aeton.app", label: "aeton.app", intro: "Se sei curioso della mindfulness:" },
-  },
+const principles = [
+  { title: "Presenza", text: "Ogni volo per me è un esercizio di attenzione: sto dove sono, e il racconto lo sente." },
+  { title: "Ascolto", text: "Prima di volare ascolto te e il luogo: chi lo vive, a chi vuoi arrivare, cosa deve restare." },
+  { title: "Volo lento", text: "Movimenti morbidi e continui, un montaggio che respira, tutto il tempo per guardare." },
+  { title: "Suono registrato sul posto", text: "Vento, passi, acqua, voci: il suono vero del luogo, non una musica qualsiasi." },
 ];
 
 const step = "mb-4 font-mono text-[11px] uppercase tracking-[0.18em] text-verde";
@@ -62,60 +53,36 @@ export default function About() {
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mb-14 text-[18px] leading-relaxed text-ink2">
-                Sono {site.firstName}, insegnante di mindfulness, e ogni volo per me è un esercizio di presenza. Porto quella
-                piena consapevolezza in un volo armonioso, perché chi guarda possa provare quello che provo io lassù: il
-                contatto con l&apos;essenza del luogo, non solo la sua immagine. È per questo che faccio questo lavoro.
+                Sono {site.firstName}, pilota di droni. Racconto luoghi con calma, perché chi guarda possa provare quello che provo io lassù: il contatto con l&apos;essenza del posto, non solo la sua immagine.
               </p>
-            </Reveal>
-
-            {/* il come */}
-            <Reveal delay={0.05}>
-              <p className={step}>Il come</p>
-              <p className="mb-4 text-[24px] font-medium leading-[1.2] tracking-tight sm:text-[30px]">
-                Con calma, e <span className="accent">ascoltando</span>.
-              </p>
-              <p className="mb-14 text-ink2">
-                Prima di volare ascolto te e il luogo: chi lo vive, a chi vuoi arrivare, cosa deve restare a chi guarda. Poi
-                voli lenti e morbidi, un montaggio che respira, un suono che fa sentire il posto.
-              </p>
-            </Reveal>
-
-            <Reveal delay={0.05}>
-              <p className={step}>Il cosa</p>
             </Reveal>
 
             <ol className="border-t border-ink/10">
-              {roles.map((r, i) => (
+              {principles.map((r, i) => (
                 <Reveal as="li" key={r.title} delay={0.05 + i * 0.06} className="grid grid-cols-[2.5rem_1fr] gap-x-3 border-b border-ink/10 py-6">
                   <span className="pt-1.5 font-mono text-[11px] tracking-[0.16em] text-ink3">0{i + 1}</span>
                   <div>
                     <h3 className="mb-1.5 text-[22px] font-semibold tracking-tight text-ink sm:text-[24px]">{r.title}</h3>
                     <p className="max-w-[52ch] text-[15.5px] leading-snug text-ink2">{r.text}</p>
-                    {r.link && (
-                      <p className="mt-3 text-[15px] text-ink2">
-                        {r.link.intro}{" "}
-                        <a
-                          href={r.link.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 font-medium text-ink underline decoration-verde/50 underline-offset-4 transition-colors hover:text-verde"
-                        >
-                          {r.link.label}
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
-                            <path d="M7 17 17 7M9 7h8v8" />
-                          </svg>
-                        </a>
-                      </p>
-                    )}
                   </div>
                 </Reveal>
               ))}
             </ol>
 
+            <Reveal delay={0.1}>
+              <p className="mt-8 text-[15px] text-ink2">
+                Insegno anche mindfulness, con la mia app{" "}
+                <a href="https://aeton.app" target="_blank" rel="noopener noreferrer" className="font-medium text-ink underline decoration-verde/50 underline-offset-4 transition-colors hover:text-verde">
+                  AETON
+                </a>
+                .
+              </p>
+            </Reveal>
+
             <Reveal delay={0.1} className="mt-12 flex flex-wrap items-center justify-between gap-8">
               <p className="inline-block -rotate-3 font-hand text-[42px] leading-none">{site.firstName}</p>
               <TransitionLink href="/contatti" label="Rotta: Contatti" className="btn btn-dark">
-                Fai vivere un luogo <span className="dot" aria-hidden />
+                {navCta.label} <span className="dot" aria-hidden />
               </TransitionLink>
             </Reveal>
           </div>

@@ -5,7 +5,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import VideoScrub from "./VideoScrub";
 import ShotOverlay from "./ShotOverlay";
 import Claim from "./Claim";
-import { works, type WorkArea } from "@/lib/site";
+import { eyebrow, type WorkArea } from "@/lib/site";
 import { useShell } from "./shell/ShellContext";
 
 /**
@@ -40,7 +40,7 @@ export default function ProjectHero({ w }: { w: WorkArea }) {
             {/* la promessa del progetto, come nei capitoli della landing */}
             <div className="absolute inset-x-7 bottom-12 sm:inset-x-10 sm:bottom-16 md:inset-x-16">
               <p className="mb-5 font-mono text-[12px] uppercase tracking-[0.2em] text-white/80">
-                SP{String(works.indexOf(w) + 1).padStart(2, "0")} · {w.category} · {w.place}
+                {eyebrow(w)}
               </p>
               <h1 className="max-w-[20ch] text-[clamp(34px,5.4vw,84px)] font-semibold leading-[0.98] tracking-[-0.045em] [text-shadow:0_2px_50px_rgba(0,0,0,.3)]">
                 <Claim text={w.claim} />

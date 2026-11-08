@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Reveal from "./Reveal";
-import { calLink } from "@/lib/site";
+import { calLink, site, whatsappHref } from "@/lib/site";
 
 type CalApi = ((...args: unknown[]) => void) & {
   ns?: Record<string, (...args: unknown[]) => void>;
@@ -47,6 +47,7 @@ function loadCal() {
 
 const steps = ["Scegli giorno e ora", "Raccontami il luogo", "Ci sentiamo su Google Meet"];
 
+
 /** Contatti: il calendario di Cal.com, dove si sceglie l'orario e si risponde alle domande. */
 export default function Contact() {
   const box = useRef<HTMLDivElement>(null);
@@ -87,14 +88,30 @@ export default function Contact() {
           </Reveal>
           <Reveal delay={0.05}>
             <h1 className="h2 mb-6">
-              Fai vivere un <span className="accent">luogo</span>.
+              Parliamone in <span className="accent">30 minuti</span>.
             </h1>
           </Reveal>
           <Reveal delay={0.1}>
             <p className="max-w-[420px] text-ink2">
-              Scegli tu il giorno e l&apos;ora per una chiamata di mezz&apos;ora. Ci sentiamo con calma e ti porto
-              qualche proposta.
+              Scegli tu il giorno e l&apos;ora per una chiamata di mezz&apos;ora: mi racconti il luogo e vediamo insieme da dove cominciare.
             </p>
+          </Reveal>
+          <Reveal delay={0.12}>
+            <p className="mt-6 text-[15px] font-medium text-ink">Ti rispondo entro 24 ore.</p>
+            {(whatsappHref || site.email) && (
+              <p className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-[15px] text-ink2">
+                {whatsappHref && (
+                  <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="font-medium text-ink underline decoration-verde/50 underline-offset-4 transition-colors hover:text-verde">
+                    Scrivimi su WhatsApp
+                  </a>
+                )}
+                {site.email && (
+                  <a href={`mailto:${site.email}`} className="font-medium text-ink underline decoration-verde/50 underline-offset-4 transition-colors hover:text-verde">
+                    {site.email}
+                  </a>
+                )}
+              </p>
+            )}
           </Reveal>
           <Reveal delay={0.15}>
             <ol className="mt-10 flex flex-col gap-3 font-mono text-[12px] uppercase tracking-[0.16em] text-ink2">

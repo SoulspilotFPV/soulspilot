@@ -1,12 +1,14 @@
-import type { Metadata } from "next";
+import { pageMeta } from "@/lib/meta";
 import About from "@/components/About";
 import FooterCurtain from "@/components/FooterCurtain";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: `Chi sono · ${site.brand}`,
-  description: "Riprese aeree e FPV, siti web su misura e mindfulness: chi c'è dietro soulspilot.",
-};
+  description: "Presenza, ascolto, volo lento e suono registrato sul posto: chi c'è dietro soulspilot.",
+  path: "/chi-sono",
+  image: "chi-sono",
+});
 
 export default function ChiSono() {
   return (

@@ -6,25 +6,27 @@ import ProjectGallery from "@/components/ProjectGallery";
 import NextProject from "@/components/NextProject";
 import Reveal from "@/components/Reveal";
 import TransitionLink from "@/components/shell/TransitionLink";
-import Ticket from "@/components/Ticket";
-import { site, works } from "@/lib/site";
+import Keepsake from "@/components/Keepsake";
+import { pageMeta } from "@/lib/meta";
+import { navCta, readyWorks, site } from "@/lib/site";
 
 type Params = { slug: string };
 
 export function generateStaticParams() {
-  return works.map((w) => ({ slug: w.slug }));
+  return readyWorks.map((w) => ({ slug: w.slug }));
 }
 
 export function generateMetadata({ params }: { params: Params }): Metadata {
-  const w = works.find((x) => x.slug === params.slug);
-  return { title: w ? `${w.title} · ${site.brand}` : site.brand, description: w?.line };
+  const w = readyWorks.find((x) => x.slug === params.slug);
+  if (!w) return { title: site.brand };
+  return pageMeta({ title: `${w.title} · ${site.brand}`, description: w.line, path: `/progetti/${w.slug}`, image: w.slug });
 }
 
 export default function WorkDetail({ params }: { params: Params }) {
-  const i = works.findIndex((x) => x.slug === params.slug);
+  const i = readyWorks.findIndex((x) => x.slug === params.slug);
   if (i < 0) notFound();
-  const w = works[i];
-  const next = works[(i + 1) % works.length];
+  const w = readyWorks[i];
+  const next = readyWorks[(i + 1) % readyWorks.length];
 
   return (
     <>
@@ -43,7 +45,7 @@ export default function WorkDetail({ params }: { params: Params }) {
               </Reveal>
               <Reveal delay={0.05}>
                 <h2 className="h2 mb-6">
-                  Dall&apos;alto, <span className="accent">{w.title}</span>.
+                  {w.kind === "chiave" ? "La chiave: " : "La cartolina: "}<span className="accent">{w.title}</span>.
                 </h2>
               </Reveal>
               <Reveal delay={0.1}>
@@ -56,7 +58,7 @@ export default function WorkDetail({ params }: { params: Params }) {
             </div>
             <div className="flex flex-col gap-6 self-start">
               <Reveal delay={0.1}>
-                <Ticket w={w} index={i} />
+                <Keepsake w={w} />
               </Reveal>
             </div>
           </div>
@@ -82,7 +84,7 @@ export default function WorkDetail({ params }: { params: Params }) {
                 Hai un luogo <span className="accent">da raccontare?</span>
               </h2>
               <TransitionLink href="/contatti" label="Rotta: Contatti" className="btn btn-light self-start">
-                Entriamo in contatto <span className="dot" aria-hidden />
+                {navCta.label} <span className="dot" aria-hidden />
               </TransitionLink>
             </Reveal>
             <NextProject w={next} />

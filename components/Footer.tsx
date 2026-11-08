@@ -1,5 +1,5 @@
 import Logo from "./Logo";
-import { nav, navCta, site } from "@/lib/site";
+import { nav, navCta, site, whatsappHref } from "@/lib/site";
 import TransitionLink from "./shell/TransitionLink";
 
 const socialIcons: Record<string, React.ReactNode> = {
@@ -39,7 +39,7 @@ export default function Footer() {
           </div>
           <nav aria-label="Footer">
             <ul className="flex flex-col gap-1.5 md:gap-2">
-              {[...nav, { label: "Contatti", href: navCta.href }].map((n) => (
+              {[...nav, { label: navCta.label, href: navCta.href }].map((n) => (
                 <li key={n.href}>
                   <TransitionLink href={n.href} label={`Rotta: ${n.label}`} className="text-[15px] text-white/70 transition-colors duration-300 hover:text-white">
                     {n.label}
@@ -49,26 +49,35 @@ export default function Footer() {
             </ul>
           </nav>
           <div className="flex flex-col gap-4 md:gap-5">
-            <a href={`mailto:${site.email}`} className="text-[15px] font-medium text-white/90 transition-colors duration-300 hover:text-verde-chiaro">
-              {site.email}
-            </a>
-            <ul className="grid w-fit grid-cols-2 gap-2.5 md:flex md:gap-3">
-              {Object.entries(site.social).map(([name, href]) => (
-                <li key={name}>
-                  <a
-                    href={href}
-                    aria-label={name}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:text-[#1c3227]"
-                  >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                      {socialIcons[name]}
-                    </svg>
-                  </a>
-                </li>
-              ))}
-            </ul>
+            {whatsappHref && (
+              <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="text-[15px] font-medium text-white/90 transition-colors duration-300 hover:text-verde-chiaro">
+                WhatsApp
+              </a>
+            )}
+            {site.email && (
+              <a href={`mailto:${site.email}`} className="text-[15px] font-medium text-white/90 transition-colors duration-300 hover:text-verde-chiaro">
+                {site.email}
+              </a>
+            )}
+            {Object.keys(site.social).length > 0 && (
+              <ul className="grid w-fit grid-cols-2 gap-2.5 md:flex md:gap-3">
+                {Object.entries(site.social).map(([name, href]) => (
+                  <li key={name}>
+                    <a
+                      href={href}
+                      aria-label={name}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:text-[#1c3227]"
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                        {socialIcons[name]}
+                      </svg>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
         {/* firma grande in fondo alla tenda */}
@@ -83,7 +92,7 @@ export default function Footer() {
           <span className="order-last sm:order-none">
             Built with love by myself. <span className="text-verde-chiaro">Enjoy.</span>
           </span>
-          <span>{site.vat}</span>
+          {site.vat ? <span>{site.vat}</span> : <span aria-hidden className="hidden sm:inline" />}
         </p>
       </div>
     </footer>
