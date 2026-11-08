@@ -28,7 +28,7 @@ const socialIcons: Record<string, React.ReactNode> = {
 /** La tenda finale: verdone scuro, la chiusura del viaggio. */
 export default function Footer() {
   return (
-    <footer className="bg-[#1c3227] px-6 pb-6 pt-10 text-white md:rounded-t-[56px] md:px-12 md:pb-8 md:pt-20">
+    <footer className="bg-[#1c3227] px-6 pb-6 pt-10 text-white md:px-12 md:pb-8 md:pt-20">
       <div className="mx-auto max-w-page">
         <div className="grid grid-cols-2 gap-x-6 gap-y-8 md:flex md:flex-row md:justify-between md:gap-12">
           <div className="col-span-2 md:col-span-1">

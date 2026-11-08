@@ -49,7 +49,7 @@ export default function Hero() {
         animate={show ? { opacity: 1, y: 0 } : undefined}
         transition={{ duration: 1, delay: 1.0, ease }}
       >
-        Racconto luoghi con voli lenti e il suono registrato sul posto, perché chi guarda senta di esserci già.
+        Racconto luoghi perché chi guarda senta di esserci già.
       </motion.p>
 
       <motion.div

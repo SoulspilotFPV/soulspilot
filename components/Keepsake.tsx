@@ -4,8 +4,6 @@ import { useState } from "react";
 import { Arrow, KeyArt, Postmark, Stamp, colorsOf, stampOf } from "./Marks";
 import type { WorkArea } from "@/lib/site";
 
-const noBackface = { backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" } as const;
-
 /**
  * L'oggetto del progetto, nella sua pagina.
  * Cartolina: fronte con francobollo e timbro, "Gira la cartolina" mostra il retro con i dettagli.
@@ -80,13 +78,14 @@ export default function Keepsake({ w }: { w: WorkArea }) {
               className="absolute inset-0 origin-left cursor-pointer rounded-[14px] text-left motion-reduce:transition-none"
               style={{
                 transform: open ? "rotateY(-116deg)" : "none",
-                transition: `transform ${open ? "1500ms 380ms" : "1100ms"} cubic-bezier(0.3, 0.9, 0.35, 1.04), filter 900ms ease`,
+                // oltre i 90° la porta mostrerebbe il suo rovescio: sfuma poco dopo aver passato la perpendicolare
+                opacity: open ? 0 : 1,
+                transition: `transform ${open ? "1500ms 380ms" : "1100ms"} cubic-bezier(0.3, 0.9, 0.35, 1.04), filter 900ms ease, opacity ${open ? "250ms 1000ms" : "200ms 250ms"} linear`,
                 filter: open ? "brightness(0.84)" : "none",
                 background: `linear-gradient(120deg, #f8f6f1, #e9e5db)`,
                 border: `1px solid ${ink}22`,
                 boxShadow: open ? "14px 0 40px -18px rgba(0,0,0,.35)" : "0 30px 60px -40px rgba(20,24,26,.5)",
                 pointerEvents: open ? "none" : "auto",
-                ...noBackface,
               }}
             >
               {/* specchiature della porta */}
@@ -109,14 +108,21 @@ export default function Keepsake({ w }: { w: WorkArea }) {
             </button>
           </>
         ) : (
-          <div
-            className="absolute inset-0 transition-transform duration-[900ms] [transform-style:preserve-3d] [transition-timing-function:var(--ease)] motion-reduce:transition-none"
-            style={{ transform: open ? "rotateY(180deg)" : "none", WebkitTransformStyle: "preserve-3d" }}
-          >
+          <>
+            {/*
+              Le due facce ruotano ciascuna per conto proprio e si scambiano a metà giro (opacità).
+              Niente preserve-3d né backface-visibility: Safari su iPhone con quelli disegna il retro vuoto.
+            */}
             {/* retro: su telefono occupa tutta la larghezza, dal tablet in su è diviso come una vera cartolina */}
             <div
-              style={{ background: paper, transform: "rotateY(180deg)", ...noBackface }}
-              className="absolute inset-0 overflow-y-auto rounded-[14px] p-6 shadow-[0_30px_60px_-40px_rgba(20,24,26,.5)] sm:p-7"
+              style={{
+                background: paper,
+                transform: open ? "rotateY(0deg)" : "rotateY(180deg)",
+                opacity: open ? 1 : 0,
+                transition: "transform 900ms var(--ease), opacity 0ms linear 450ms",
+                pointerEvents: open ? "auto" : "none",
+              }}
+              className="absolute inset-0 overflow-hidden rounded-[14px] p-6 shadow-[0_30px_60px_-40px_rgba(20,24,26,.5)] motion-reduce:!transition-none sm:p-7"
               aria-hidden={!open}
             >
               <div className="pointer-events-none absolute inset-y-8 left-1/2 hidden border-l sm:block" style={{ borderColor: `${ink}1f` }} />
@@ -124,7 +130,17 @@ export default function Keepsake({ w }: { w: WorkArea }) {
             </div>
 
             {/* fronte */}
-            <div className="absolute inset-0 overflow-hidden rounded-[14px] shadow-[0_30px_60px_-40px_rgba(20,24,26,.5)]" style={{ background: paper, ...noBackface }} aria-hidden={open}>
+            <div
+              className="absolute inset-0 overflow-hidden rounded-[14px] shadow-[0_30px_60px_-40px_rgba(20,24,26,.5)] motion-reduce:!transition-none"
+              style={{
+                background: paper,
+                transform: open ? "rotateY(-180deg)" : "rotateY(0deg)",
+                opacity: open ? 0 : 1,
+                transition: "transform 900ms var(--ease), opacity 0ms linear 450ms",
+                pointerEvents: open ? "none" : "auto",
+              }}
+              aria-hidden={open}
+            >
               {still && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={still} alt={w.title} className="absolute inset-0 h-full w-full object-cover" />
@@ -136,7 +152,7 @@ export default function Keepsake({ w }: { w: WorkArea }) {
               <Postmark text={w.mark} color="rgba(255,255,255,.85)" className="absolute right-[88px] top-8 h-[84px] w-[126px] -rotate-6" />
               <p className="accent absolute bottom-5 left-6 text-[40px] leading-none text-white [text-shadow:0_2px_24px_rgba(0,0,0,.4)]">{w.title}</p>
             </div>
-          </div>
+          </>
         )}
       </div>
 

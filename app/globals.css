@@ -156,3 +156,16 @@ body {
 }
 @keyframes beam-dust { 0% { top: 100%; opacity: 0; transform: translateX(0); } 20% { opacity: 0.9; } 55% { transform: translateX(8px); } 85% { opacity: 0.6; } 100% { top: 6%; opacity: 0; transform: translateX(-6px); } }
 .beam-dust { top: 100%; animation: beam-dust 6s ease-in-out infinite; }
+
+/* Su telefono i pannelli sfocati sopra il cielo 3D in movimento fanno scattare lo scroll (iPhone in particolare):
+   niente sfocatura, sfondo più pieno. */
+@media (max-width: 767px) {
+  [class*="backdrop-blur"] {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  /* niente sfocatura animata sulle riprese: costa molto, la dissolvenza basta */
+  [data-covers] {
+    filter: none !important;
+  }
+}

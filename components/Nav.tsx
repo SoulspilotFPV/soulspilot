@@ -48,7 +48,7 @@ export default function Nav() {
           aria-label="Principale"
           className={`relative mx-auto flex items-center justify-between transition-all duration-700 [transition-timing-function:var(--ease)] ${
             pill
-              ? "h-14 rounded-full border border-white/50 bg-white/45 pl-3 pr-2 shadow-[0_8px_32px_-12px_rgba(20,24,26,.18)] backdrop-blur-xl backdrop-saturate-150"
+              ? "h-14 rounded-full border border-white/50 bg-white/85 md:bg-white/45 pl-3 pr-2 shadow-[0_8px_32px_-12px_rgba(20,24,26,.18)] backdrop-blur-xl backdrop-saturate-150"
               : "h-[76px] rounded-none border border-transparent bg-transparent px-5 shadow-none sm:px-8 md:px-10"
           }`}
           style={{ maxWidth: pill ? 880 : 1920 }}

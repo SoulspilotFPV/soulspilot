@@ -92,9 +92,10 @@ export default function JourneyCanvas({ onProgress, onReady }: Props) {
 
     const dpr = window.devicePixelRatio || 1;
     // le nuvole sono morbide: oltre questa risoluzione la differenza non si vede, il calore sì
-    const maxRatio = Math.min(dpr, small ? 1 : 1.25);
-    const minRatio = small ? 0.45 : 0.6;
-    let ratio = Math.min(maxRatio, small ? 0.75 : 1);
+    // su telefono si disegna a risoluzione molto più bassa: le nuvole sono sfumate, il fluido dello scroll conta di più
+    const maxRatio = Math.min(dpr, small ? 0.65 : 1.25);
+    const minRatio = small ? 0.35 : 0.6;
+    let ratio = Math.min(maxRatio, small ? 0.5 : 1);
     renderer.setPixelRatio(ratio);
     el.appendChild(renderer.domElement);
 
