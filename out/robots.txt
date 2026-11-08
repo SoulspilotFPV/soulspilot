@@ -1,4 +1,4 @@
 User-Agent: *
 Allow: /
 
-Sitemap: https://example.com/sitemap.xml
+Sitemap: https://soulspilotfpv.github.io/soulspilot/sitemap.xml

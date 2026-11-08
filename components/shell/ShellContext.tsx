@@ -70,7 +70,8 @@ function afterPaint(fn: () => void) {
 
 export function ShellProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
-  const pathname = usePathname();
+  // con trailingSlash il percorso arriva come "/progetti/": lo si confronta sempre senza la barra finale
+  const pathname = usePathname().replace(/(.)\/$/, "$1");
   const [phase, setPhase] = useState<Phase>("boot");
   const [mode, setMode] = useState<Mode>("drone");
   const [booted, setBooted] = useState(false);
