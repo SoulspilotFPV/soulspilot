@@ -61,16 +61,6 @@ export default function Hero() {
         <TransitionLink href={navCta.href} label="Rotta: Prenota" className="btn btn-dark !h-14 !px-8 !text-[16px]">
           {navCta.label} <span className="dot" aria-hidden />
         </TransitionLink>
-        <a
-          href="#viaggio"
-          onClick={(e) => {
-            e.preventDefault();
-            document.getElementById("viaggio")?.scrollIntoView({ behavior: "smooth" });
-          }}
-          className="text-[15px] font-medium text-ink underline decoration-verde/50 underline-offset-4 transition-colors hover:text-verde"
-        >
-          Guarda le cartoline
-        </a>
       </motion.div>
 
       {/* invito a scorrere */}

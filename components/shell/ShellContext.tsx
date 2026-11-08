@@ -171,6 +171,8 @@ export function ShellProvider({ children }: { children: ReactNode }) {
         if (document.documentElement.style.overflow === "hidden") window.location.assign((process.env.NEXT_PUBLIC_BASE_PATH ?? "") + href);
       }, 9000);
       later(() => {
+        // lo schermo è coperto: si torna in cima prima di cambiare pagina, così la nuova nasce già dall'alto
+        jumpTo(0);
         target.current = path;
         setPhase("wait");
         router.push(path, { scroll: false });
@@ -191,7 +193,10 @@ export function ShellProvider({ children }: { children: ReactNode }) {
       const go = () =>
         afterPaint(() => {
           later(() => {
+            // ultima verifica prima di scoprire la pagina: deve partire dall'inizio, mai dal footer
+            jumpTo(0);
             setPhase("reveal");
+            later(() => window.scrollY > 0 && !popping.current && jumpTo(0), 60);
             later(() => {
               setPhase("idle");
               setExpand(null);

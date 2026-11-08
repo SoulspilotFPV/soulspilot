@@ -2,6 +2,7 @@
 
 import Reveal from "./Reveal";
 import TransitionLink from "./shell/TransitionLink";
+import { firstFrame } from "@/lib/video";
 import type { WorkArea } from "@/lib/site";
 
 /** "Prossimo progetto": il riquadro si allarga a tutto schermo e diventa l'apertura del progetto successivo. */
@@ -14,7 +15,7 @@ export default function NextProject({ w }: { w: WorkArea }) {
         label={`Rotta: ${w.title}`}
         expand={(el) => {
           const r = el.getBoundingClientRect();
-          return { rect: { top: r.top, left: r.left, width: r.width, height: r.height }, image };
+          return { rect: { top: r.top, left: r.left, width: r.width, height: r.height }, image: w.stills ? firstFrame(w.stills) : undefined };
         }}
         className="group relative block h-full min-h-[280px] overflow-hidden rounded-[32px] shadow-soft"
       >

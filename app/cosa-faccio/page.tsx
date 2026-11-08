@@ -78,10 +78,9 @@ export default function CosaFaccio() {
           </div>
 
           <ul className="flex flex-col gap-4">
-            {sectors.map((s, i) => (
+            {sectors.map((s) => (
               <Reveal as="li" key={s.name} delay={0.04} className="grid gap-8 rounded-[28px] border border-white/60 bg-white/60 p-7 shadow-[0_30px_80px_-40px_rgba(30,33,35,.35)] backdrop-blur-2xl sm:p-9 lg:grid-cols-[4fr_8fr] lg:gap-12">
-                <div className="flex flex-col justify-between gap-6">
-                  <p className={`${label} text-verde`}>{String(i + 1).padStart(2, "0")}</p>
+                <div className="flex items-start">
                   <h2 className="accent text-[clamp(32px,3.4vw,46px)] leading-[1] text-ink">{s.name}</h2>
                 </div>
                 <div className="grid gap-6 md:grid-cols-2 md:gap-10">

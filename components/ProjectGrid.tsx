@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import TransitionLink from "./shell/TransitionLink";
 import Reveal from "./Reveal";
-import { fallbackToH264, videoSrc } from "@/lib/video";
+import { fallbackToH264, firstFrame, videoSrc } from "@/lib/video";
 import Claim from "./Claim";
 import { Arrow, KeyArt, Postmark, Stamp, colorsOf, stampOf } from "./Marks";
 import { eyebrow, type WorkArea } from "@/lib/site";
@@ -82,28 +82,14 @@ function Card({ w }: { w: WorkArea }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // fotogramma corrente come immagine di partenza della transizione
-  const capture = () => {
-    const v = video.current;
-    if (!v || v.readyState < 2 || !playing) return still;
-    try {
-      const c = document.createElement("canvas");
-      c.width = v.videoWidth;
-      c.height = v.videoHeight;
-      c.getContext("2d")!.drawImage(v, 0, 0);
-      return c.toDataURL("image/jpeg", 0.86);
-    } catch {
-      return still;
-    }
-  };
-
   return (
     <TransitionLink
       href={`/progetti/${w.slug}`}
       label={`Rotta: ${w.title}`}
       expand={() => {
         const r = box.current!.getBoundingClientRect();
-        return { rect: { top: r.top, left: r.left, width: r.width, height: r.height }, image: capture() };
+        // la transizione parte sempre dal primo fotogramma: è quello con cui si apre la pagina del progetto
+        return { rect: { top: r.top, left: r.left, width: r.width, height: r.height }, image: w.stills ? firstFrame(w.stills) : undefined };
       }}
       onMouseEnter={play}
       onMouseLeave={stop}

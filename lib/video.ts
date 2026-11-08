@@ -5,8 +5,16 @@
  */
 let av1: boolean | null = null;
 
+/** schermo verticale: lì il sito usa la versione 9:16 delle riprese */
+export const isPortrait = () => window.innerHeight > window.innerWidth * 1.05;
+
+/** Primo fotogramma della ripresa (1.avif o, su schermo verticale, 1m.avif): è quello da cui parte la pagina del progetto. */
+export function firstFrame(dir: string) {
+  return `${dir}/${isPortrait() ? "1m" : "1"}.avif`;
+}
+
 export function videoSrc(base: string) {
-  const tag = window.innerHeight > window.innerWidth * 1.05 ? "m" : "d";
+  const tag = isPortrait() ? "m" : "d";
   // su telefono sempre H.264 con fotogrammi completi ravvicinati: lo scrub resta pulito e il decoder hardware lo regge
   if (tag === "m") return `${base}-m.mp4`;
   if (av1 === null) {

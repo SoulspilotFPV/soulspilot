@@ -1,6 +1,7 @@
 "use client";
 
 import TransitionLink from "./shell/TransitionLink";
+import { firstFrame } from "@/lib/video";
 import { Arrow, KeyArt, Postmark, Stamp, colorsOf, stampOf } from "./Marks";
 import type { WorkArea } from "@/lib/site";
 
@@ -60,7 +61,7 @@ export default function WorkStub({ w }: { w: WorkArea }) {
       label={`Rotta: ${w.title}`}
       expand={(el) => {
         const r = el.getBoundingClientRect();
-        return { rect: { top: r.top, left: r.left, width: r.width, height: r.height }, image: w.stills ? `${w.stills}/1.avif` : undefined };
+        return { rect: { top: r.top, left: r.left, width: r.width, height: r.height }, image: w.stills ? firstFrame(w.stills) : undefined };
       }}
       style={style}
       className={`group pointer-events-auto ${cls}`}

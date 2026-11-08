@@ -103,8 +103,13 @@ export default function JourneyCanvas({ onProgress, onReady }: Props) {
 
     let W = 1, H = 1;
     const resize = () => {
-      W = window.innerWidth;
-      H = window.innerHeight;
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      // su telefono la barra del browser che compare e scompare cambia solo l'altezza: ridimensionare il cielo
+      // lo farebbe lampeggiare. Si ridisegna solo se la larghezza cambia o lo schermo diventa più alto.
+      if (small && W > 1 && w === W && h <= H) return;
+      W = w;
+      H = h;
       renderer.setSize(W, H);
       clouds.setRes(W, H);
     };

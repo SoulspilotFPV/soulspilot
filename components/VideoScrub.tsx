@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import type { MotionValue } from "framer-motion";
-import { fallbackToH264, videoSrc } from "@/lib/video";
+import { fallbackToH264, isPortrait, videoSrc } from "@/lib/video";
 
 type Props = {
   /** percorso senza suffisso: si carica `${src}-d.mp4` (desktop) o `${src}-m.mp4` (telefono) */
@@ -24,6 +24,8 @@ export default function VideoScrub({ src, progress, trigger, poster }: Props) {
 
   useEffect(() => {
     const v = ref.current!;
+    // su schermo verticale il poster è il primo fotogramma della versione 9:16
+    if (poster && isPortrait()) v.poster = poster.replace(/\/1\.avif$/, "/1m.avif");
     let dur = 0;
     let cur = 0;
     let raf = 0;
@@ -88,6 +90,7 @@ export default function VideoScrub({ src, progress, trigger, poster }: Props) {
       v.removeEventListener("loadedmetadata", onMeta);
       v.removeEventListener("seeked", loop);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [src, progress, trigger]);
 
   return (

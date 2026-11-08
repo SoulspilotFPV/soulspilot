@@ -35,8 +35,8 @@ export default function WorkDetail({ params }: { params: Params }) {
 
         {/* il racconto sale sopra la ripresa mentre questa si ritira */}
         <section className="relative z-20 -mt-[38vh] px-3 pb-16 sm:px-6">
-          <div className="mx-auto grid max-w-page gap-10 rounded-[32px] border border-white/60 bg-white/70 p-6 shadow-[0_40px_100px_-40px_rgba(20,24,26,.45)] backdrop-blur-2xl sm:p-10 md:rounded-huge md:p-14 lg:grid-cols-[7fr_5fr] lg:gap-16">
-            <div>
+          <div className="mx-auto grid max-w-page grid-cols-1 gap-10 rounded-[32px] border border-white/60 bg-white/70 p-6 shadow-[0_40px_100px_-40px_rgba(20,24,26,.45)] backdrop-blur-2xl sm:p-10 md:rounded-huge md:p-14 lg:grid-cols-[7fr_5fr] lg:gap-16">
+            <div className="min-w-0">
               <TransitionLink href="/progetti" label="Rotta: Progetti" className="mb-8 inline-flex items-center gap-2 text-[14px] text-ink2 transition-colors hover:text-verde">
                 <span aria-hidden>←</span> Tutti i progetti
               </TransitionLink>
@@ -56,7 +56,7 @@ export default function WorkDetail({ params }: { params: Params }) {
                 ))}
               </Reveal>
             </div>
-            <div className="flex flex-col gap-6 self-start">
+            <div className="flex min-w-0 flex-col gap-6 lg:self-start">
               <Reveal delay={0.1}>
                 <Keepsake w={w} />
               </Reveal>

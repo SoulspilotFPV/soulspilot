@@ -109,7 +109,7 @@ export const works: WorkArea[] = [
     sector: "Immobiliare",
     kind: "chiave",
     status: "pronto",
-    claim: "Entri in casa *prima* di aprire la porta.",
+    claim: "Fai vivere un ambiente *ancor prima* di visitarlo dal vivo.",
     line: "Un volo continuo dall'ingresso all'ultima stanza: chi guarda capisce come si vive la casa, non solo com'è fatta.",
     audience: "Agenzie e proprietari di immobili di pregio",
     mark: "Residenza",
@@ -171,10 +171,8 @@ export const works: WorkArea[] = [
 /** progetti che hanno una pagina propria */
 export const readyWorks = works.filter((w) => w.status === "pronto");
 
-/** riga sopra la promessa: "01 / 04 · Cultura · Forte di Fenestrelle", numerata come in tutto il sito */
+/** riga sopra la promessa: "Cultura · Forte di Fenestrelle" */
 export function eyebrow(w: WorkArea) {
-  const n = String(works.findIndex((x) => x.slug === w.slug) + 1).padStart(2, "0");
-  const t = String(works.length).padStart(2, "0");
   const tail = w.status === "in-arrivo" ? "cartolina in arrivo" : w.captionLive && w.caption ? w.caption : w.place;
-  return [`${n} / ${t}`, w.sector, tail].filter(Boolean).join(" · ");
+  return [w.sector, tail].filter(Boolean).join(" · ");
 }
